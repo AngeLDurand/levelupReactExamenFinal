@@ -10,6 +10,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { CustomFullScreenLoading } from "./auth/components/CustomFullScreenLoading";
 import { useAuthStore } from "./auth/store/auth.store";
+import { CartProvider } from "./shop/context/CartProvider";
 
 const queryClient = new QueryClient();
 
@@ -33,7 +34,9 @@ export const App = () => {
     <QueryClientProvider client={queryClient}>
       <Suspense fallback={<CustomFullScreenLoading />}>
         <CheckAuthProvider>
-          <RouterProvider router={appRouter} />
+          <CartProvider>
+            <RouterProvider router={appRouter} />
+          </CartProvider>
         </CheckAuthProvider>
       </Suspense>
       <ReactQueryDevtools initialIsOpen={false} />

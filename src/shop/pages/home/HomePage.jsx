@@ -1,3 +1,4 @@
+import { CartOffcanvas } from "../../components/CartOffcanvas";
 import { CustomJumbotron } from "../../components/CustomJumbotron";
 import { ProductsGrid } from "../../components/ProductsGrid";
 import { useProducts } from "../../hooks/useProducts";
@@ -9,6 +10,8 @@ export const HomePage = () => {
       <CustomJumbotron titulo={"LevelUp Gamer"} subtitulo={""} />
 
       <ProductsGrid products={data ?? []} />
+
+      <CartOffcanvas />
     </>
   );
 };

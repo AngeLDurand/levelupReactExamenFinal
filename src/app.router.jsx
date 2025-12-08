@@ -1,7 +1,6 @@
 import { createBrowserRouter, Navigate } from "react-router";
 import { ShopLayout } from "./shop/layouts/ShopLayout";
 import { HomePage } from "./shop/pages/home/HomePage";
-import { ProductPage } from "./shop/pages/product/ProductPage";
 
 import { LoginPage } from "./auth/pages/login/LoginPage";
 import { RegisterPage } from "./auth/pages/register/RegisterPage";
@@ -14,6 +13,11 @@ import {
   NoAuthenticatedRoute,
 } from "./auth/components/ProtectedRoutes";
 import { AdminOrderPage } from "./admin/pages/order/AdminOrderPage";
+import { AdminUserPage } from "./admin/pages/user/AdminUserPage";
+import { AdminUserOrdersPage } from "./admin/pages/user/AdminUserOrdersPage";
+import { CheckoutAddressPage } from "./shop/pages/checkout/CheckoutAddressPage";
+import { CheckoutSummaryPage } from "./shop/pages/checkout/CheckoutSummaryPage";
+import { ProfilePage } from "./shop/pages/profile/ProfilePage";
 
 const AuthLayout = lazy(() => import("./auth/layouts/AuthLayout"));
 
@@ -29,9 +33,14 @@ export const appRouter = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: "products/",
-        element: <ProductPage />,
+        path: "checkout/address",
+        element: <CheckoutAddressPage />,
       },
+      {
+        path: "checkout/summary",
+        element: <CheckoutSummaryPage />,
+      },
+      { path: "profile", element: <ProfilePage /> },
     ],
   },
 
@@ -81,6 +90,14 @@ export const appRouter = createBrowserRouter([
       {
         path: "orders",
         element: <AdminOrderPage />,
+      },
+      {
+        path: "users",
+        element: <AdminUserPage />,
+      },
+      {
+        path: "users/:correo/orders",
+        element: <AdminUserOrdersPage />,
       },
     ],
   },
