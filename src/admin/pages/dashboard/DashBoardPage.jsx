@@ -1,3 +1,4 @@
+import { useAuthStore } from "../../../auth/store/auth.store";
 import { ordersMock } from "../../../mocks/orders.mock";
 import { productsMock } from "../../../mocks/products.mock";
 import { usersMock } from "../../../mocks/users.mock";
@@ -6,6 +7,7 @@ import { AdminStatsCards } from "../../components/AdminStatsCards";
 import { AdminTitle } from "../../components/AdminTitle";
 
 export const DashBoardPage = () => {
+  const { user, email } = useAuthStore();
   const totalVentas = ordersMock
     .filter((o) => o.estado === "PAGADO")
     .reduce((acc, o) => acc + o.total, 0);
@@ -17,7 +19,7 @@ export const DashBoardPage = () => {
     <>
       <AdminTitle
         titulo={"Dashboard"}
-        subtitulo={"Aquí puedes ver el estado de tu negocio"}
+        subtitulo={`Hola ${user}, aquí puedes ver el estado de tu negocio`}
       />
 
       <AdminStatsCards

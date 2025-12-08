@@ -1,7 +1,9 @@
-import { useRef } from "react";
-import { Link, NavLink, useSearchParams } from "react-router";
+import { Link, NavLink } from "react-router";
+import { useAuthStore } from "../../auth/store/auth.store";
 
 export const CustomHeader = () => {
+  const { authStatus, isAdmin, logout } = useAuthStore();
+
   return (
     <header className="shadow-sm">
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -27,10 +29,24 @@ export const CustomHeader = () => {
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div className="ms-auto d-flex gap-2">
-              <Link to={"/auth/login"}>Login</Link>
-              <Link className="text-danger" to={"/admin"}>
-                Admin
-              </Link>
+              {authStatus == "autenticado" ? (
+                <button className="btn btn-dark" onClick={logout}>
+                  Cerrar Sesión
+                </button>
+              ) : (
+                <Link to={"/auth/login"}>Login</Link>
+              )}
+
+              {isAdmin() && (
+                <button className="btn btn-danger">
+                  <Link
+                    className="text-white text-decoration-none"
+                    to={"/admin"}
+                  >
+                    Admin
+                  </Link>
+                </button>
+              )}
             </div>
           </div>
         </div>

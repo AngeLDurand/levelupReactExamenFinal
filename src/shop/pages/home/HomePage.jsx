@@ -1,5 +1,4 @@
 import { CustomJumbotron } from "../../components/CustomJumbotron";
-import { ProductsFilter } from "../../components/ProductsFilter";
 import { ProductsGrid } from "../../components/ProductsGrid";
 import { useProducts } from "../../hooks/useProducts";
 

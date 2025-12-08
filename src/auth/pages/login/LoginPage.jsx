@@ -1,9 +1,11 @@
 import { Link, useNavigate } from "react-router";
-import { loginAction } from "../../actions/login.actions";
 import { useRef, useState } from "react";
+import { useAuthStore } from "../../store/auth.store";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
+
+  const { login } = useAuthStore();
 
   const toastRef = useRef(null);
   let toastInstance = null;
@@ -25,14 +27,14 @@ export const LoginPage = () => {
     const email = formData.get("email");
     const password = formData.get("password");
 
-    try {
-      const data = await loginAction(email, password);
-      localStorage.setItem("token", data.token);
+    const loginExitoso = await login(email, password);
+
+    if (loginExitoso) {
       navigate("/");
-    } catch (error) {
+    } else {
       showErrorToast();
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
   return (
     <>

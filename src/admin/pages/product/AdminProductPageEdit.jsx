@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { productsMock } from "../../../mocks/products.mock";
+import { useQueryClient } from "@tanstack/react-query";
+
 import { AdminTitle } from "../../components/AdminTitle";
+import { useProducts } from "../../../shop/hooks/useProducts";
+import { updateProductAction } from "../../actions/update-product.actions";
 
 export const AdminProductPageEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  const product = productsMock.find((p) => p.id === Number(id));
+  const { data } = useProducts();
+  const product = data?.find((p) => p.id === Number(id));
 
   const [form, setForm] = useState({
     modelo: "",
@@ -15,8 +20,11 @@ export const AdminProductPageEdit = () => {
     categoria: "",
     precio: "",
     descripcion: "",
-    imagen_url: "",
+    imagenUrl: "",
   });
+
+  const [isSaving, setIsSaving] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
     if (product) {
@@ -26,7 +34,7 @@ export const AdminProductPageEdit = () => {
         categoria: product.categoria,
         precio: product.precio,
         descripcion: product.descripcion,
-        imagen_url: product.imagen_url,
+        imagenUrl: product.imagenUrl,
       });
     }
   }, [product]);
@@ -53,20 +61,64 @@ export const AdminProductPageEdit = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSaving(true);
 
-    // Aquí luego harás la petición PUT/PATCH a tu API
-    console.log("Producto actualizado:", { id: product.id, ...form });
+    try {
+      await updateProductAction(product.id, form);
 
-    alert("Producto actualizado (mock). Aquí iría la llamada a la API.");
-    navigate("/admin/products");
+      // ⚡ Avisamos a React Query que los productos cambiaron
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+
+      setIsSuccess(true);
+    } catch (error) {
+      console.error(error);
+      // aquí podrías mostrar un toast de error
+      alert("No se pudo actualizar el producto.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleCancel = () => {
     navigate("/admin/products");
   };
 
+  // ✅ Vista de éxito
+  if (isSuccess) {
+    return (
+      <div className="container py-5">
+        <div className="card border-0 shadow-sm p-4 text-center">
+          <div className="mb-3">
+            <i className="bi bi-check-circle-fill text-success display-3"></i>
+          </div>
+          <h2 className="fw-bold mb-2">Producto actualizado</h2>
+          <p className="text-muted mb-4">
+            El producto <strong>{form.modelo}</strong> se actualizó
+            correctamente.
+          </p>
+
+          <div className="d-flex justify-content-center gap-3">
+            <button
+              className="btn btn-primary"
+              onClick={() => navigate("/admin/products")}
+            >
+              Volver a productos
+            </button>
+            <button
+              className="btn btn-outline-secondary"
+              onClick={() => setIsSuccess(false)}
+            >
+              Seguir editando
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 🧾 Vista normal (formulario)
   return (
     <div className="container py-3">
       <AdminTitle
@@ -123,7 +175,6 @@ export const AdminProductPageEdit = () => {
                 onChange={handleChange}
                 required
               />
-              {/* Si quieres, esto puede ser un <select> con categorías fijas */}
             </div>
 
             {/* Precio */}
@@ -160,21 +211,21 @@ export const AdminProductPageEdit = () => {
 
             {/* Imagen URL + preview */}
             <div className="mb-3">
-              <label htmlFor="imagen_url" className="form-label">
+              <label htmlFor="imagenUrl" className="form-label">
                 URL de imagen
               </label>
               <input
                 type="text"
-                id="imagen_url"
-                name="imagen_url"
+                id="imagenUrl"
+                name="imagenUrl"
                 className="form-control"
-                value={form.imagen_url}
+                value={form.imagenUrl}
                 onChange={handleChange}
               />
-              {form.imagen_url && (
+              {form.imagenUrl && (
                 <div className="mt-3 text-center">
                   <img
-                    src={form.imagen_url}
+                    src={form.imagenUrl}
                     alt={form.modelo}
                     className="img-fluid rounded"
                     style={{ maxHeight: "160px", objectFit: "contain" }}
@@ -192,8 +243,12 @@ export const AdminProductPageEdit = () => {
               >
                 Cancelar
               </button>
-              <button type="submit" className="btn btn-primary">
-                Guardar cambios
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={isSaving}
+              >
+                {isSaving ? "Guardando..." : "Guardar cambios"}
               </button>
             </div>
           </form>

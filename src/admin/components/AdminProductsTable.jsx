@@ -3,16 +3,11 @@ import { useNavigate } from "react-router";
 const formatCLP = (num) =>
   num.toLocaleString("es-CL", { minimumFractionDigits: 0 });
 
-export const AdminProductsTable = ({ products, onDelete }) => {
+export const AdminProductsTable = ({ products }) => {
   const navigate = useNavigate();
 
   const editarProducto = (id) => {
     navigate(`/admin/products/${id}`);
-  };
-
-  const eliminarProducto = (id) => {
-    if (!confirm("¿Seguro que deseas eliminar este producto?")) return;
-    onDelete(id); // delegamos la acción al padre
   };
 
   return (
@@ -37,7 +32,7 @@ export const AdminProductsTable = ({ products, onDelete }) => {
                 <tr key={p.id}>
                   <td>
                     <img
-                      src={p.imagen_url}
+                      src={p.imagenUrl}
                       alt={p.modelo}
                       width="60"
                       className="img-thumbnail"

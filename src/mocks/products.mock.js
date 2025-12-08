@@ -1,6 +1,5 @@
 export const productsMock = [
   {
-    id:1,
     nombre: "OMEN 16-am0018la",
     descripcion:
       "Notebook Gamer Omen 16-am0018la Intel Core i7 16GB RAM 1TB SSD NVIDIA RTX 5060 16'' 2K 144Hz",

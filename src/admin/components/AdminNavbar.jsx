@@ -85,7 +85,7 @@ export const AdminNavbar = () => {
           {/* Botones de la derecha */}
           <div className="d-flex gap-2">
             <button
-              className="btn btn-outline-light btn-sm"
+              className="btn btn-light btn-sm"
               type="button"
               onClick={irATienda}
             >

@@ -8,7 +8,7 @@ export const loginAction=async(correo,clave)=>{
       clave
     })
 
-    console.log(data)
+      localStorage.setItem("token", data.token);
 
     return data;
   } catch (error) {

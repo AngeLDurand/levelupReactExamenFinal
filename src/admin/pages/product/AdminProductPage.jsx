@@ -1,14 +1,11 @@
-import { useState } from "react";
 import { AdminProductsTable } from "../../components/AdminProductsTable";
 import { AdminTitle } from "../../components/AdminTitle";
-import { productsMock } from "../../../mocks/products.mock";
+
+import { useProducts } from "../../../shop/hooks/useProducts";
 
 export const AdminProductPage = () => {
-  const [products, setProducts] = useState(productsMock);
+  const { data } = useProducts();
 
-  const deleteProduct = (id) => {
-    setProducts(products.filter((p) => p.id !== id));
-  };
   return (
     <>
       <AdminTitle
@@ -16,7 +13,7 @@ export const AdminProductPage = () => {
         subtitulo={"Aquí puedes ver y administrar tus productos"}
       />
 
-      <AdminProductsTable products={products} onDelete={deleteProduct} />
+      <AdminProductsTable products={data || []} />
     </>
   );
 };

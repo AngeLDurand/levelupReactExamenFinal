@@ -1,14 +1,7 @@
-import { usersMock } from "../../mocks/users.mock";
-
 const formatCLP = (num) =>
   num.toLocaleString("es-CL", { minimumFractionDigits: 0 });
 
 const formatDate = (iso) => new Date(iso).toISOString().slice(0, 10);
-
-const getUserNameByEmail = (email) => {
-  const user = usersMock.find((u) => u.correo === email);
-  return user ? user.nombre : email;
-};
 
 export const AdminOrdersTable = ({ orders, limit }) => {
   const data = limit ? orders.slice(0, limit) : orders;
@@ -30,7 +23,6 @@ export const AdminOrdersTable = ({ orders, limit }) => {
               <tr>
                 <th># Orden</th>
                 <th>Fecha</th>
-                <th>Cliente</th>
                 <th>Estado</th>
                 <th className="text-end">Total</th>
               </tr>
@@ -40,7 +32,7 @@ export const AdminOrdersTable = ({ orders, limit }) => {
                 <tr key={order.id}>
                   <td>#{order.id}</td>
                   <td>{formatDate(order.fecha)}</td>
-                  <td>{getUserNameByEmail(order.userEmail)}</td>
+
                   <td>
                     <span
                       className={
